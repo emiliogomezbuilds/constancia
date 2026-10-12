@@ -142,7 +142,7 @@ export async function saveRecordAction(_prev: SaveState, formData: FormData): Pr
     return { error: e instanceof Error && e.message === "span_too_long" ? "El documento cubre más de 36 meses. Usa un periodo más corto." : "No se pudieron calcular las cifras." };
   }
 
-  const title = text(formData.get("title"), 1, 80) ?? `Ingresos ${monthLabel(fig.months[0].month)} a ${monthLabel(fig.months[fig.months.length - 1].month)}`;
+  const title = text(formData.get("title"), 1, 80) ?? (fig.months.length === 1 ? `Ingresos ${monthLabel(fig.months[0].month)}` : `Ingresos ${monthLabel(fig.months[0].month)} a ${monthLabel(fig.months[fig.months.length - 1].month)}`);
   const method = check.verified.some((r) => r.method === "ai") ? "ai_verified" : "parser";
 
   const { data, error } = await supabase

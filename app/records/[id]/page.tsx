@@ -12,6 +12,8 @@ import { formatMx } from "@/lib/format";
 import { SELF_SUPPLIED_LABEL } from "@/lib/wording";
 import { createCertificateAction, deleteRecordAction, revokeCertificateAction } from "@/app/actions";
 import { Explain } from "./explain";
+import { CopyLink } from "./copy-link";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +25,8 @@ export default async function RecordPage({ params }: { params: Promise<{ id: str
   const { supabase, user } = await requireUser();
   const { data: r } = await supabase.from("income_records").select("*").eq("id", id).maybeSingle();
   if (!r) notFound();
+  const h = await headers();
+  const origin = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
   const { data: certs } = await supabase.from("certificates").select("id,token,expires_at,revoked_at,created_at").eq("record_id", id).order("created_at", { ascending: false });
   const ids = (certs ?? []).map((c) => c.id);
   const { data: views } = ids.length ? await supabase.from("certificate_views").select("certificate_id,viewed_at").in("certificate_id", ids).order("viewed_at", { ascending: false }) : { data: [] };
@@ -74,7 +78,7 @@ export default async function RecordPage({ params }: { params: Promise<{ id: str
                   {revoked ? <Badge variant="destructive">Revocada</Badge> : expired ? <Badge variant="outline">Vencida</Badge> : <Badge variant="success">Activa</Badge>}
                   <span className="text-slate-600">vence {formatMx(c.expires_at)}</span>
                 </div>
-                {!revoked && !expired && <p className="mt-2 break-all font-mono text-xs">/c/{c.token}</p>}
+                {!revoked && !expired && <CopyLink url={`${origin}/c/${c.token}`} />}
                 <p className="mt-2 text-slate-600">Aperturas: {mine.length}{mine[0] ? ` · última ${formatMx(mine[0].viewed_at)}` : ""}</p>
                 {!revoked && !expired && (
                   <form action={revokeCertificateAction} className="mt-2">

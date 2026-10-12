@@ -16,6 +16,11 @@ export function NewFlow() {
   if (!an) {
     return (
       <form action={analyze} className="mt-4 space-y-4">
+        <ol className="list-decimal space-y-1 rounded bg-blue-50 p-3 pl-8 text-sm text-slate-800">
+          <li><strong>Pega o sube</strong> los movimientos de tu banco.</li>
+          <li><strong>Revisa</strong> los depósitos que encontramos y desmarca los que no son ingreso tuyo.</li>
+          <li><strong>Guarda.</strong> Después, si quieres, creas un enlace con vencimiento para enseñar tus cifras.</li>
+        </ol>
         {a.error && <p role="alert" className="rounded bg-red-50 p-3 text-sm text-red-800">{a.error}</p>}
         <label className="block text-sm font-medium">Tipo de documento
           <select name="source_kind" className="mt-1 block w-full rounded border p-2">
