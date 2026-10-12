@@ -8,7 +8,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   title: "Constancia",
   description:
-    "Convierte un documento que ya tienes en cifras mensuales claras, con la fuente a la vista. Sin calificaciones, sin puntajes. Tú decides quién lo ve.",
+    "Convierte un documento que ya tienes en cifras mensuales claras, con la fuente a la vista. No te pone etiquetas ni notas. Tú decides quién lo ve.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
