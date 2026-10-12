@@ -75,7 +75,7 @@ export function NewFlow() {
         </table>
       </div>
       <label className="block text-sm font-medium">Título (opcional)
-        <input name="title" maxLength={80} className="mt-1 block w-full rounded border p-2" />
+        <input name="title" maxLength={80} placeholder="Déjalo vacío y lo nombramos por las fechas" className="mt-1 block w-full rounded border p-2" />
       </label>
       <input type="hidden" name="source_text" value={an.sourceText} />
       <input type="hidden" name="source_kind" value={an.sourceKind} />
