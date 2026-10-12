@@ -76,6 +76,11 @@ const pc = parseStatement(csv, NOW);
 eq(pc.mode, "csv", "csv detected");
 eq(pc.rows.map((r) => r.amount), [2500, 3100.5], "csv deposits only, quoted thousands handled");
 eq(verifyRows(pc.rows, csv, NOW).rejected, 0, "csv rows verify");
+// regression (found in live test): an unquoted amount after a comma, "…,3100.50,11800.50", must verify
+const csv2 = "Fecha,Concepto,Cargo,Abono,Saldo\n03/09/2026,SPEI RECIBIDO DEMO UNO,,\"2,500.00\",9000.00\n10/09/2026,COMPRA DEMO,300.00,,8700.00\n17/09/2026,SPEI RECIBIDO DEMO DOS,,3100.50,11800.50";
+const p2 = parseStatement(csv2, NOW);
+eq(p2.rows.length, 2, "live-test csv: two deposits found");
+eq(verifyRows(p2.rows, csv2, NOW).rejected, 0, "live-test csv: both rows pass verification at save time");
 const sc = parseStatement("Fecha;Descripcion;Monto;Tipo\n01/06/2026;DEPOSITO DEMO;1800.00;abono\n02/06/2026;RETIRO;500.00;cargo", NOW);
 eq(sc.rows.map((r) => r.amount), [1800], "semicolon csv with a type column");
 

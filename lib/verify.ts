@@ -13,9 +13,10 @@ function lineHasAmount(line: string, amount: number): boolean {
   // Compare as numbers so "12800", "12,800.00" and "$12,800" all match 12800.00.
   const tokens = amountsIn(line).map((a) => Math.round(a.value * 100));
   if (tokens.includes(cents)) return true;
-  // CSV cells may hold bare numbers like 12800 with no decimals or sign: accept an exact bare token.
-  const bare = new RegExp(`(?<![\\d.])(?<!\\d,)${String(amount).replace(".", "\\.")}(?!\\d|\\.\\d|,\\d{3}(?!\\d))`);
-  return bare.test(line);
+  // CSV cells hold bare numbers right after a delimiter ("...,3100.50,..."), which amountsIn() skips.
+  // Accept an exact bare token, written either as typed ("3100.5") or with cents ("3100.50").
+  const forms = [...new Set([String(amount), amount.toFixed(2)])];
+  return forms.some((f) => new RegExp(`(?<![\\d.])(?<!\\d,)${f.replace(".", "\\.")}(?!\\d|\\.\\d|,\\d{3}(?!\\d))`).test(line));
 }
 
 export function sourceHashInput(text: string): string {
