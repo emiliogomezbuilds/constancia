@@ -18,7 +18,7 @@ type AiErr = { ok: false; error: "no_key" | "too_long" | "request_failed" | "bad
 async function callGemini(prompt: string): Promise<AiOk<string> | AiErr> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return { ok: false, error: "no_key" };
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
