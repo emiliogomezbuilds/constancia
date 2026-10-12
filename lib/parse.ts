@@ -168,10 +168,10 @@ export function parseStatement(text: string, now: Date = new Date()): ParseResul
       description: clean(rest.replace(AMOUNT_RE, " ")),
       line: i + 1,
       method: "parser",
-      ambiguous: amts.length > 1,
+      ambiguous: amts.length > 2, // movement + balance is the normal case; 3+ amounts is unclear
     });
   }
   if (rows.length === 0) warnings.push("No se detectaron depósitos. Revisa que el texto tenga fecha y monto en cada línea.");
-  if (rows.some((r) => r.ambiguous)) warnings.push("En algunas líneas hay más de un monto (por ejemplo el saldo). Se tomó el primero; revisa esas filas.");
+  if (rows.some((r) => r.ambiguous)) warnings.push("En algunas líneas hay tres o más montos. Se tomó el primero; revisa las filas marcadas.");
   return { rows, skipped, mode: "text", warnings };
 }
