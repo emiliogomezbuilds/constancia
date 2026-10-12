@@ -13,7 +13,7 @@ export const AI_MAX_CHARS = 20_000;
 const TIMEOUT_MS = 25_000;
 
 type AiOk<T> = { ok: true; value: T };
-type AiErr = { ok: false; error: "no_key" | "too_long" | "request_failed" | "bad_output" };
+type AiErr = { ok: false; error: "no_key" | "too_long" | "request_failed" | "bad_output"; status?: number };
 
 async function callGemini(prompt: string): Promise<AiOk<string> | AiErr> {
   const key = process.env.GEMINI_API_KEY;
@@ -31,7 +31,7 @@ async function callGemini(prompt: string): Promise<AiOk<string> | AiErr> {
       }),
       signal: ctrl.signal,
     });
-    if (!res.ok) return { ok: false, error: "request_failed" };
+    if (!res.ok) return { ok: false, error: "request_failed", status: res.status }; // status code only, never the body or key
     const data = (await res.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
     const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? "";
     return text ? { ok: true, value: text } : { ok: false, error: "bad_output" };

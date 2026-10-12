@@ -85,7 +85,7 @@ export async function analyzeAction(_prev: AnalyzeState, formData: FormData): Pr
       } else if (ai.error === "no_key") {
         aiNote = "La lectura con IA no está configurada en este servidor. Se usaron solo las reglas.";
       } else {
-        aiNote = "La lectura con IA no estuvo disponible ahora. Se usaron solo las reglas.";
+        aiNote = `La lectura con IA no estuvo disponible ahora${ai.status ? ` (código ${ai.status})` : ai.error === "bad_output" ? " (respuesta vacía)" : " (sin respuesta)"}. Se usaron solo las reglas.`;
       }
     }
   }
