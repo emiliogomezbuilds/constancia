@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Convierte un documento que ya tienes en cifras mensuales claras, con la fuente a la vista. No te pone etiquetas ni notas. Tú decides quién lo ve.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
